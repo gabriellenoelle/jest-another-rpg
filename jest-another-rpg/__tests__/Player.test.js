@@ -4,15 +4,21 @@ jest.mock("../lib/Potion");
 
 console.log(new Potion());
 
-const Player = require("../lib/Player");
-test("creates a player object", () => {
-  const player = new Player("Dave");
+function Player(name = "") {
+  this.name = name;
 
-  expect(player.name).toBe("Dave");
-  expect(player.health).toEqual(expect.any(Number));
-  expect(player.strength).toEqual(expect.any(Number));
-  expect(player.agility).toEqual(expect.any(Number));
-  expect(player.inventory).toEqual(
-    expect.arrayContaining([expect.any(Object)])
-  );
-});
+  this.health = Math.floor(Math.random() * 10 + 95);
+  this.strength = Math.floor(Math.random() * 5 + 7);
+  this.agility = Math.floor(Math.random() * 5 + 7);
+
+  this.inventory = [new Potion("health"), new Potion()];
+}
+
+Player.prototype.getStats = function () {
+  return {
+    potions: this.inventory.length,
+    health: this.health,
+    strength: this.strength,
+    agility: this.agility,
+  };
+};
