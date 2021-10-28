@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
-const Enemy = require("./Enemy");
-const Player = require("./Player");
+const Enemy = require("../lib/Enemy");
+const Player = require("../lib/Player");
 
 function Game() {
   this.roundNumber = 0;
@@ -14,14 +14,15 @@ Game.prototype.initializeGame = function () {
   this.enemies.push(new Enemy("goblin", "sword"));
   this.enemies.push(new Enemy("orc", "baseball bat"));
   this.enemies.push(new Enemy("skeleton", "axe"));
+
   this.currentEnemy = this.enemies[0];
+
   inquirer
     .prompt({
       type: "text",
       name: "name",
       message: "What is your name?",
     })
-    // destructure name from the prompt object
     .then(({ name }) => {
       this.player = new Player(name);
 
@@ -37,6 +38,7 @@ Game.prototype.startNewBattle = function () {
   }
   console.log("Your stats are as follows:");
   console.table(this.player.getStats());
+
   console.log(this.currentEnemy.getDescription());
 
   this.battle();
@@ -72,7 +74,6 @@ Game.prototype.battle = function () {
 
               this.player.usePotion(potionDetails[0] - 1);
               console.log(`You used a ${potionDetails[1]} potion.`);
-
               this.checkEndOfBattle();
             });
         } else {
@@ -81,6 +82,7 @@ Game.prototype.battle = function () {
 
           console.log(`You attacked the ${this.currentEnemy.name}`);
           console.log(this.currentEnemy.getHealth());
+
           this.checkEndOfBattle();
         }
       });
@@ -90,6 +92,7 @@ Game.prototype.battle = function () {
 
     console.log(`You were attacked by the ${this.currentEnemy.name}`);
     console.log(this.player.getHealth());
+
     this.checkEndOfBattle();
   }
 };
@@ -113,8 +116,9 @@ Game.prototype.checkEndOfBattle = function () {
       this.startNewBattle();
     } else {
       console.log("You win!");
-      console.log("You've been defeated!");
     }
+  } else {
+    console.log("You've been defeated!");
   }
 };
 
